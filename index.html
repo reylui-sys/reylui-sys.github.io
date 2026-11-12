@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jose Luis León · Graphics &amp; XR Developer</title>
+<meta name="description" content="Portfolio de Jose Luis León: programación gráfica (OpenGL, GLSL, Vulkan), XR con Unity y simulación.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0d12; --bg2:#11141b; --card:#151924; --line:#232838;
+    --text:#e7e9ef; --muted:#9aa3b5; --accent:#7cf2c4; --accent2:#8aa8ff; --warm:#ffb86b;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg);color:var(--text);font:16px/1.6 Inter,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px}
+  /* nav */
+  nav{position:sticky;top:0;z-index:10;background:rgba(11,13,18,.82);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;gap:24px;height:60px}
+  .logo{font:700 18px 'Space Grotesk',system-ui,sans-serif;letter-spacing:.5px;text-decoration:none}
+  .logo span{color:var(--accent)}
+  nav .links{margin-left:auto;display:flex;gap:20px;font-size:14px;color:var(--muted)}
+  nav .links a{text-decoration:none}
+  nav .links a:hover{color:var(--text)}
+  .lang{display:flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;font:500 12px 'JetBrains Mono',ui-monospace,monospace}
+  .lang button{background:none;border:0;color:var(--muted);padding:5px 10px;cursor:pointer}
+  .lang button.on{background:var(--accent);color:#06110c}
+  @media(max-width:600px){nav .links{display:none} .lang{margin-left:auto}}
+  /* hero */
+  header.hero{position:relative;overflow:hidden;padding:110px 0 90px;border-bottom:1px solid var(--line)}
+  #grid{position:absolute;inset:0;width:100%;height:100%;opacity:.55}
+  .hero .wrap{position:relative}
+  .kicker{font:500 13px 'JetBrains Mono',ui-monospace,monospace;color:var(--accent);letter-spacing:.08em;text-transform:uppercase}
+  h1{font:700 clamp(40px,6.4vw,76px)/1.02 'Space Grotesk',system-ui,sans-serif;margin:14px 0 18px;letter-spacing:-.02em}
+  h1 em{font-style:normal;background:linear-gradient(90deg,var(--accent),var(--accent2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .hero p.lead{max-width:640px;color:var(--muted);font-size:18px}
+  .cta{display:flex;gap:12px;margin-top:30px;flex-wrap:wrap}
+  .btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font:500 14px Inter;text-decoration:none;border:1px solid var(--line);background:var(--bg2)}
+  .btn.primary{background:var(--accent);color:#06110c;border-color:var(--accent)}
+  .btn:hover{transform:translateY(-1px)}
+  .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:34px}
+  .chip{font:500 12px 'JetBrains Mono',ui-monospace,monospace;color:var(--muted);border:1px solid var(--line);padding:4px 10px;border-radius:999px;background:rgba(21,25,36,.6)}
+  /* sections */
+  section{padding:84px 0;border-bottom:1px solid var(--line)}
+  h2{font:700 32px 'Space Grotesk',system-ui,sans-serif;margin-bottom:8px}
+  .sub{color:var(--muted);margin-bottom:38px;max-width:680px}
+  /* projects */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:22px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:border-color .2s,transform .2s}
+  .card:hover{border-color:#39415a;transform:translateY(-3px)}
+  .card.feat{grid-column:span 2}
+  @media(max-width:760px){.card.feat{grid-column:auto}}
+  .thumb{aspect-ratio:16/9;background:#0e1118;position:relative;overflow:hidden}
+  .card.feat .thumb{aspect-ratio:1536/434}
+  .card.feat .thumb.art{aspect-ratio:21/6}
+  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .thumb.art{display:flex;align-items:center;justify-content:center}
+  .thumb.art b{font:700 46px 'Space Grotesk',system-ui,sans-serif;letter-spacing:-.02em;color:rgba(255,255,255,.92);text-shadow:0 4px 30px rgba(0,0,0,.35)}
+  .art-xr{background:radial-gradient(circle at 25% 30%,#38e0b0 0,transparent 45%),radial-gradient(circle at 80% 70%,#6f7dff 0,transparent 50%),#121626}
+  .art-sabacc{background:radial-gradient(circle at 70% 20%,#ffb86b 0,transparent 42%),radial-gradient(circle at 20% 80%,#d0455a 0,transparent 50%),#1a1218}
+  .art-sim{background:radial-gradient(circle at 30% 40%,#8aa8ff 0,transparent 40%),radial-gradient(circle at 75% 65%,#7cf2c4 0,transparent 45%),#10141d}
+  .art-gl{background:conic-gradient(from 210deg at 60% 50%,#7cf2c4,#8aa8ff,#c38aff,#ffb86b,#7cf2c4);}
+  .art-gl b{mix-blend-mode:overlay}
+  .tag{position:absolute;top:12px;left:12px;font:500 11px 'JetBrains Mono',ui-monospace,monospace;background:rgba(11,13,18,.8);border:1px solid var(--line);padding:3px 8px;border-radius:6px;color:var(--accent)}
+  .body{padding:20px 22px 22px;display:flex;flex-direction:column;gap:10px;flex:1}
+  .card h3{font:700 20px 'Space Grotesk',system-ui,sans-serif}
+  .card p{color:var(--muted);font-size:14.5px}
+  .stack{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:6px}
+  .stack span{font:500 11px 'JetBrains Mono',ui-monospace,monospace;color:var(--accent2);background:rgba(138,168,255,.08);padding:3px 7px;border-radius:6px}
+  .actions{display:flex;gap:14px;font-size:13.5px;margin-top:6px}
+  .actions a{color:var(--accent);text-decoration:none}
+  .actions a:hover{text-decoration:underline}
+  /* skills */
+  .skills{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px}
+  .skill{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .skill h4{font:500 13px 'JetBrains Mono',ui-monospace,monospace;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;margin-bottom:10px}
+  .skill ul{list-style:none;color:var(--muted);font-size:14.5px}
+  .skill li{padding:3px 0}
+  .skill li strong{color:var(--text);font-weight:500}
+  /* about */
+  .about{display:grid;grid-template-columns:1.3fr 1fr;gap:40px;align-items:start}
+  @media(max-width:820px){.about{grid-template-columns:1fr}}
+  .about p{color:var(--muted);margin-bottom:14px}
+  .now{background:var(--bg2);border:1px solid var(--line);border-radius:var(--radius);padding:22px}
+  .now h4{font:500 13px 'JetBrains Mono',ui-monospace,monospace;color:var(--warm);text-transform:uppercase;margin-bottom:12px}
+  .now li{margin:0 0 10px 18px;color:var(--muted);font-size:14.5px}
+  footer{padding:40px 0;color:var(--muted);font-size:13px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  [data-en]{display:none}
+  html[lang=en] [data-es]{display:none}
+  html[lang=en] [data-en]{display:revert}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="logo" href="#">jl<span>.</span>león</a>
+    <div class="links">
+      <a href="#projects"><span data-es>Proyectos</span><span data-en>Projects</span></a>
+      <a href="#skills"><span data-es>Tecnologías</span><span data-en>Skills</span></a>
+      <a href="#about"><span data-es>Sobre mí</span><span data-en>About</span></a>
+    </div>
+    <div class="lang" role="group" aria-label="Idioma / Language">
+      <button id="b-es" class="on" onclick="setLang('es')">ES</button>
+      <button id="b-en" onclick="setLang('en')">EN</button>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <canvas id="grid" aria-hidden="true"></canvas>
+  <div class="wrap">
+    <div class="kicker"><span data-es>Ingeniero Multimedia · Junior developer</span><span data-en>Multimedia Engineer · Junior developer</span></div>
+    <h1>Jose Luis León<br><em><span data-es>Gráficos, XR y simulación</span><span data-en>Graphics, XR &amp; simulation</span></em></h1>
+    <p class="lead">
+      <span data-es>Programo en C++ y GLSL y me gusta entender qué pasa por debajo: pipelines de render, shaders, física y sistemas en tiempo real. Aquí reúno los proyectos de la carrera de los que estoy más orgulloso.</span>
+      <span data-en>I write C++ and GLSL and like understanding what happens under the hood: render pipelines, shaders, physics and real-time systems. These are the projects from my degree I'm proudest of.</span>
+    </p>
+    <div class="cta">
+      <a class="btn primary" href="#projects"><span data-es>Ver proyectos</span><span data-en>See projects</span> →</a>
+      <a class="btn" href="https://github.com/reylui-sys" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+    <div class="chips">
+      <span class="chip">C++17</span><span class="chip">OpenGL 4 · GLSL</span><span class="chip">Vulkan</span><span class="chip">Unity · C#</span><span class="chip">OpenXR</span><span class="chip">Photon PUN</span><span class="chip">Python · bpy</span><span class="chip">Processing</span><span class="chip">Three.js · D3</span>
+    </div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <h2><span data-es>Proyectos</span><span data-en>Projects</span></h2>
+    <p class="sub"><span data-es>Cada tarjeta enlaza al repositorio con el código, las instrucciones para compilarlo y vídeos o capturas.</span><span data-en>Every card links to the repository with the code, build instructions and videos or screenshots.</span></p>
+
+    <div class="grid">
+
+      <article class="card feat">
+        <div class="thumb"><img src="assets/ssao.png" alt="SSAO: AO off, on and AO buffer"><span class="tag">C++ · OpenGL</span></div>
+        <div class="body">
+          <h3>SSAO — Screen Space Ambient Occlusion</h3>
+          <p data-es>Render diferido de 4 pasadas escrito desde cero: G-Buffer con MRT, SSAO con 64 muestras en un hemisferio orientado por la normal y ruido rotado, blur e iluminación Phong modulada por el AO. Los FBO se recrean al redimensionar y el AO se puede activar o inspeccionar en directo.</p>
+          <p data-en>A 4-pass deferred renderer built from scratch: an MRT G-Buffer, SSAO with 64 normal-oriented hemisphere samples and rotated noise, a blur pass and Phong lighting modulated by AO. FBOs are rebuilt on resize, and AO can be toggled and inspected live.</p>
+          <div class="stack"><span>C++17</span><span>OpenGL 4</span><span>GLSL</span><span>FBO/MRT</span><span>CMake</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/ssao-opengl" target="_blank" rel="noopener">GitHub ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="thumb art art-xr"><b>XR</b><img src="https://img.youtube.com/vi/IszvCUDUt_Q/hqdefault.jpg" alt="Feria XR demo" loading="lazy" onerror="this.remove()" style="position:absolute;inset:0"><span class="tag">Unity 6 · OpenXR</span></div>
+        <div class="body">
+          <h3>Feria XR</h3>
+          <p data-es>Una feria en VR con tres casetas (disparos, dardos y hockey), comandos de voz y dificultad global, y un juego de realidad mixta en el que los aliens salen de las paredes reales, detectadas filtrando la malla del entorno por la normal.</p>
+          <p data-en>A VR fairground with three booths (shooting, darts, hockey), voice commands and global difficulty, plus a mixed-reality game where aliens appear on your real walls, found by filtering the room mesh by normal.</p>
+          <div class="stack"><span>C#</span><span>XRI 3</span><span>AR Foundation</span><span>Meta Quest</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/feria-xr-unity" target="_blank" rel="noopener">GitHub ↗</a><a href="https://www.youtube.com/watch?v=IszvCUDUt_Q" target="_blank" rel="noopener">Vídeo ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="thumb art art-sabacc"><b>Sabacc</b><span class="tag">Unity · Photon</span></div>
+        <div class="body">
+          <h3>Sabacc Online</h3>
+          <p data-es>El juego de cartas de Star Wars, en 3D y multijugador online para 2–4 personas. Las reglas están en un núcleo C# independiente de Unity y el máster es autoritativo: los jugadores envían comandos y el máster difunde eventos. Tiene 163 tests EditMode y las decisiones de diseño están documentadas en ADRs.</p>
+          <p data-en>The Star Wars card game in 3D, online for 2–4 players. The rules live in an engine-independent C# core and the master client is authoritative: players send commands and the master broadcasts events. 163 EditMode tests, with the design decisions documented as ADRs.</p>
+          <div class="stack"><span>C#</span><span>Unity</span><span>Photon PUN 2</span><span>NUnit</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/sabacc-unity" target="_blank" rel="noopener">GitHub ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="thumb"><img src="assets/city.jpg" alt="Procedural city rendered in Blender"><span class="tag">Python · Blender</span></div>
+        <div class="body">
+          <h3><span data-es>Ciudad procedural y tráfico</span><span data-en>Procedural City &amp; Traffic</span></h3>
+          <p data-es>Add-on de Blender que genera una ciudad y coches animados con drivers de interpolación propios (lineal, Hermite y Catmull-Rom), con orientación por cuaterniones, alabeo en las curvas y control de velocidad.</p>
+          <p data-en>A Blender add-on that generates a city and cars animated by custom interpolation drivers (linear, Hermite, Catmull-Rom), with quaternion orientation, banking in curves and speed control.</p>
+          <div class="stack"><span>Python</span><span>bpy</span><span>Animation</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/blender-city-traffic-addon" target="_blank" rel="noopener">GitHub ↗</a><a href="https://youtu.be/f3K-VEeumSE" target="_blank" rel="noopener">Vídeo ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="thumb art-sim"><img src="https://img.youtube.com/vi/sN2tPsCnBpA/hqdefault.jpg" alt="Particle collision simulation" loading="lazy" onerror="this.remove()"><span class="tag">Processing</span></div>
+        <div class="body">
+          <h3><span data-es>Simulación física</span><span data-en>Physics Simulation</span></h3>
+          <p data-es>Integradores (de Euler a RK4), sistemas de partículas, colisiones aceleradas con rejilla y hash espacial (10.000 partículas), cuerpos deformables, olas de Gerstner y sólidos rígidos.</p>
+          <p data-en>Integrators (Euler to RK4), particle systems, collisions accelerated with a grid and a spatial hash (10,000 particles), deformable bodies, Gerstner waves and rigid bodies.</p>
+          <div class="stack"><span>Java</span><span>Processing</span><span>Numerical methods</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/physics-simulation-processing" target="_blank" rel="noopener">GitHub ↗</a><a href="https://reylui-sys.github.io/physics-simulation-processing/" target="_blank" rel="noopener">Web ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card feat">
+        <div class="thumb art art-gl"><b>GLSL</b><span class="tag">C++ · OpenGL</span></div>
+        <div class="body">
+          <h3><span data-es>Ejercicios OpenGL/GLSL</span><span data-en>OpenGL/GLSL Exercises</span></h3>
+          <p data-es>13 ejercicios desde el pipeline fijo hasta los shaders modernos: cube maps y Fresnel, normal y parallax mapping, shadow mapping con PCF, teselación, geometry shaders y partículas con compute shaders.</p>
+          <p data-en>13 exercises from the fixed pipeline to modern shaders: cube maps and Fresnel, normal and parallax mapping, shadow mapping with PCF, tessellation, geometry shaders and compute-shader particles.</p>
+          <div class="stack"><span>C++</span><span>GLSL</span><span>Compute</span><span>Tessellation</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/opengl-glsl-exercises" target="_blank" rel="noopener">GitHub ↗</a></div>
+        </div>
+      </article>
+
+      <article class="card">
+        <div class="thumb"><img src="assets/nautilus.jpg" alt="Canvas island-collecting game"><span class="tag">Web</span></div>
+        <div class="body">
+          <h3>Nautilus — <span data-es>web multimedia</span><span data-en>multimedia website</span></h3>
+          <p data-es>Una web completa con un juego en Canvas, un océano en Three.js, un globo con D3, mapas con Leaflet, reproductores de audio y vídeo propios y Web Components.</p>
+          <p data-en>A full website with a Canvas game, a Three.js ocean, a D3 globe, Leaflet maps, custom audio and video players, and Web Components.</p>
+          <div class="stack"><span>JavaScript</span><span>Canvas</span><span>Three.js</span><span>D3</span></div>
+          <div class="actions"><a href="https://github.com/reylui-sys/web-nautilus-multimedia" target="_blank" rel="noopener">GitHub ↗</a><a href="https://reylui-sys.github.io/web-nautilus-multimedia/" target="_blank" rel="noopener">Demo ↗</a></div>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <h2><span data-es>Tecnologías</span><span data-en>Skills</span></h2>
+    <p class="sub"><span data-es>Lo que he usado en proyectos reales, no solo en apuntes.</span><span data-en>What I've used in actual projects, not just in class notes.</span></p>
+    <div class="skills">
+      <div class="skill"><h4><span data-es>Gráficos</span><span data-en>Graphics</span></h4><ul>
+        <li><strong>OpenGL 4 / GLSL</strong>: <span data-es>render diferido, SSAO, sombras, teselación y compute</span><span data-en>deferred, SSAO, shadows, tessellation, compute</span></li>
+        <li><strong>Vulkan</strong>: <span data-es>motor propio en desarrollo</span><span data-en>own engine in progress</span></li>
+        <li><strong>OpenSceneGraph</strong>, Three.js</li></ul></div>
+      <div class="skill"><h4>XR &amp; <span data-es>videojuegos</span><span data-en>games</span></h4><ul>
+        <li><strong>Unity</strong> (C#), URP</li>
+        <li><strong>OpenXR</strong>, XR Interaction Toolkit, AR Foundation</li>
+        <li><span data-es>Multijugador con</span><span data-en>Multiplayer with</span> <strong>Photon PUN 2</strong></li></ul></div>
+      <div class="skill"><h4><span data-es>Lenguajes</span><span data-en>Languages</span></h4><ul>
+        <li><strong>C++17</strong>, C#, Java</li>
+        <li>Python (Blender bpy), JavaScript</li>
+        <li>PHP, SQL (MariaDB)</li></ul></div>
+      <div class="skill"><h4><span data-es>Herramientas</span><span data-en>Tools</span></h4><ul>
+        <li>CMake, Visual Studio, VS Code</li>
+        <li>Git, NUnit / Unity Test Framework</li>
+        <li>Blender, Processing</li></ul></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap about">
+    <div>
+      <h2><span data-es>Sobre mí</span><span data-en>About me</span></h2>
+      <p data-es>Soy graduado en Ingeniería Multimedia por la Universitat de València. Lo que más me engancha es la programación gráfica y de bajo nivel: entender cómo una GPU convierte buffers en imagen, y diseñar sistemas limpios y testeables a su alrededor.</p>
+      <p data-en>I graduated in Multimedia Engineering from the Universitat de València. What hooks me most is graphics and low-level programming: understanding how a GPU turns buffers into an image, and designing clean, testable systems around it.</p>
+      <p data-es>Quiero seguir creciendo hacia la arquitectura de software, en motores, herramientas y experiencias XR.</p>
+      <p data-en>I want to keep growing toward software architecture, working on engines, tools and XR experiences.</p>
+    </div>
+    <div class="now">
+      <h4><span data-es>Ahora mismo</span><span data-en>Right now</span></h4>
+      <ul>
+        <li data-es>Un motor gráfico propio en C++ sobre Vulkan.</li>
+        <li data-en>Building my own C++ graphics engine on Vulkan.</li>
+        <li data-es>Integración de OpenXR con VulkanSceneGraph.</li>
+        <li data-en>Integrating OpenXR with VulkanSceneGraph.</li>
+        <li data-es>Refactorizando Sabacc hacia una arquitectura de comandos y eventos.</li>
+        <li data-en>Refactoring Sabacc toward a commands/events architecture.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 Jose Luis León</span>
+    <a href="https://github.com/reylui-sys" target="_blank" rel="noopener">github.com/reylui-sys</a>
+  </div>
+</footer>
+
+<script>
+  // Idioma: ES por defecto, EN si el navegador está en inglés o si se elige a mano
+  function setLang(l){
+    document.documentElement.lang = l;
+    document.getElementById('b-es').classList.toggle('on', l==='es');
+    document.getElementById('b-en').classList.toggle('on', l==='en');
+    try{ localStorage.setItem('lang', l); }catch(e){}
+  }
+  (function(){
+    let l = null;
+    try{ l = localStorage.getItem('lang'); }catch(e){}
+    if(!l) l = (navigator.language||'es').toLowerCase().startsWith('es') ? 'es' : 'en';
+    setLang(l);
+  })();
+
+  // Fondo del hero: rejilla en perspectiva animada (Canvas 2D)
+  (function(){
+    const c = document.getElementById('grid'), ctx = c.getContext('2d');
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    let w, h, t = 0;
+    function resize(){ w = c.width = c.offsetWidth * devicePixelRatio; h = c.height = c.offsetHeight * devicePixelRatio; }
+    function frame(){
+      ctx.clearRect(0,0,w,h);
+      const hz = h*0.42, cx = w*0.72;
+      ctx.lineWidth = devicePixelRatio;
+      for(let i=-24;i<=24;i++){            // líneas hacia el punto de fuga
+        ctx.strokeStyle = 'rgba(124,242,196,0.10)';
+        ctx.beginPath(); ctx.moveTo(cx, hz); ctx.lineTo(cx + i*w*0.09, h); ctx.stroke();
+      }
+      for(let k=0;k<18;k++){               // líneas horizontales que avanzan
+        const z = ((k + t) % 18)/18, y = hz + (h-hz)*z*z;
+        ctx.strokeStyle = `rgba(138,168,255,${0.04+0.16*z})`;
+        ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke();
+      }
+      const g = ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'rgba(11,13,18,1)'); g.addColorStop(.45,'rgba(11,13,18,.2)'); g.addColorStop(1,'rgba(11,13,18,.9)');
+      ctx.fillStyle = g; ctx.fillRect(0,0,w,h);
+      if(!reduce){ t += 0.012; requestAnimationFrame(frame); }
+    }
+    resize(); addEventListener('resize', resize); frame();
+  })();
+</script>
+</body>
+</html>
